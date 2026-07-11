@@ -1,0 +1,29 @@
+databases:
+  - name: naveen-portfolio-db
+    plan: free
+    databaseName: naveen_portfolio
+    user: naveen_portfolio
+
+services:
+  - type: web
+    name: naveen-portfolio-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install && npx prisma migrate deploy
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: naveen-portfolio-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: OWNER_EMAIL
+        value: navv.fxx@gmail.com
+      - key: OWNER_PASSWORD
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: PUBLIC_URL
+        sync: false

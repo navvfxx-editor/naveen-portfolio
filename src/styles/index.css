@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { -webkit-tap-highlight-color: transparent; }
+
+html { scrollbar-width: thin; scrollbar-color: #8B14E1 #0A0A0C; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0A0A0C; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg,#8B14E1,#5B0DA6); border-radius: 8px; }
+
+body { font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
+
+::selection { background: #8B14E1; color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+.focus-ring:focus-visible { outline: 2px solid #8B14E1; outline-offset: 3px; border-radius: 4px; }
+
+.font-display { letter-spacing: 0.02em; }
+
+@layer components {
+  .glass {
+    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] shadow-glass;
+  }
+  .glass-panel {
+    @apply glass rounded-2xl;
+  }
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full bg-blood px-7 py-3 font-heading text-sm tracking-wide text-white shadow-red-glow transition-all duration-300 hover:bg-ember hover:shadow-[0_0_60px_rgba(139,20,225,0.5)] focus-ring active:scale-95;
+  }
+  .btn-outline {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.03] px-7 py-3 font-heading text-sm tracking-wide text-mist backdrop-blur-md transition-all duration-300 hover:border-blood hover:bg-white/[0.08] focus-ring active:scale-95;
+  }
+  .section { @apply relative mx-auto w-full max-w-[1440px] px-5 py-24 sm:px-8 lg:px-16 lg:py-32; }
+  .eyebrow { @apply mb-4 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.35em] text-blood; }
+  .h2 { @apply font-heading text-4xl leading-[1.05] text-mist sm:text-5xl lg:text-6xl; }
+  .body-muted { @apply text-ash; }
+  .input-field {
+    @apply w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-mist placeholder:text-ash/60 outline-none transition focus:border-blood focus:bg-white/[0.06] focus-ring;
+  }
+  .admin-shell { @apply min-h-screen bg-obsidian text-mist; }
+}
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  mix-blend-mode: overlay;
+}
+
+.text-gradient-red {
+  background: linear-gradient(90deg, #8B14E1, #B24CFF 50%, #8B14E1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

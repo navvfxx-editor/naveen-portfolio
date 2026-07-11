@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// The ONE owner account. There is no signup route — this row is created
+// only by `npm run seed`, using OWNER_EMAIL / OWNER_PASSWORD from .env.
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+// Singleton documents — one row per key: "settings", "hero", "about", "contact".
+// `data` holds the whole content object as JSON, same shape the frontend expects.
+model SiteContent {
+  id        String   @id // "settings" | "hero" | "about" | "contact"
+  data      Json
+  updatedAt DateTime @updatedAt
+}
+
+// Every repeatable collection (services, portfolio, testimonials, faqs,
+// messages) lives in this one generic table, keyed by `collection`. This
+// mirrors the old Firestore collections so the frontend's CRUD components
+// barely had to change.
+model Item {
+  id         String   @id @default(uuid())
+  collection String
+  data       Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([collection])
+}
