@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
-import { FaWhatsapp, FaInstagram, FaEnvelope, FaYoutube, FaLinkedin, FaArrowUp } from 'react-icons/fa'
+import { FaWhatsapp, FaInstagram, FaEnvelope, FaYoutube, FaLinkedin, FaArrowUp, FaUserShield } from 'react-icons/fa'
 import { useSiteData } from '../context/SiteDataContext.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 
 export default function Footer() {
   const { settings, contact } = useSiteData()
+  const { isOwner } = useAuth()
 
   function scrollTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -40,7 +42,17 @@ export default function Footer() {
       </div>
 
       <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 px-5 py-6 text-xs text-ash sm:flex-row sm:px-16">
-        <p>{settings.footerText}</p>
+        <div className="flex items-center gap-3">
+          <p>{settings.footerText}</p>
+          <Link
+            to={isOwner ? '/admin' : '/admin/login'}
+            title={isOwner ? 'Open Admin Dashboard' : 'Admin Login'}
+            aria-label="Admin"
+            className="flex h-6 w-6 items-center justify-center rounded-full text-ash/50 transition-colors hover:text-blood focus-ring"
+          >
+            <FaUserShield className="text-xs" />
+          </Link>
+        </div>
         <button onClick={scrollTop} className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 transition-colors hover:border-blood focus-ring">
           Back to top <FaArrowUp />
         </button>

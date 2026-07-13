@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import { FaPlus, FaEdit, FaTrash, FaTimes, FaSpinner } from 'react-icons/fa'
+import { FaPlus, FaEdit, FaTrash, FaTimes, FaSpinner, FaChevronDown } from 'react-icons/fa'
 import {
   listDocs, createDoc, updateDocById, deleteDocById, uploadFile, deleteFileByUrl,
 } from '../../services/apiService.js'
+import { extractYoutubeId } from '../../utils/youtube.js'
 
 /**
- * fields: [{ name, label, type: 'text'|'textarea'|'number'|'select'|'checkbox'|'file'|'url', options?, required? }]
+ * fields: [{ name, label, type: 'text'|'textarea'|'number'|'select'|'checkbox'|'file'|'url'|'youtube', options?, required? }]
  */
 export default function AdminCollectionManager({ collectionName, title, fields, columns, storageFolder }) {
   const [items, setItems] = useState([])
@@ -59,6 +60,7 @@ export default function AdminCollectionManager({ collectionName, title, fields, 
         }
         if (f.type === 'number') payload[f.name] = Number(values[f.name] || 0)
         if (f.type === 'checkbox') payload[f.name] = !!values[f.name]
+        if (f.type === 'youtube') payload[f.name] = extractYoutubeId(values[f.name])
       }
 
       if (editing) {
@@ -146,9 +148,15 @@ export default function AdminCollectionManager({ collectionName, title, fields, 
                     <textarea rows={4} className="input-field" {...register(f.name, { required: f.required })} />
                   )}
                   {f.type === 'select' && (
-                    <select className="input-field" {...register(f.name, { required: f.required })}>
-                      {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
-                    </select>
+                    <div className="relative">
+                      <select
+                        className="input-field appearance-none pr-10 cursor-pointer"
+                        {...register(f.name, { required: f.required })}
+                      >
+                        {f.options.map((o) => <option key={o} value={o} className="bg-graphite text-mist">{o}</option>)}
+                      </select>
+                      <FaChevronDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-ash" />
+                    </div>
                   )}
                   {f.type === 'checkbox' && (
                     <input type="checkbox" className="h-5 w-5 accent-blood" {...register(f.name)} />
@@ -160,9 +168,13 @@ export default function AdminCollectionManager({ collectionName, title, fields, 
                       {editing?.[f.name] && <p className="mt-1 truncate text-xs text-ash">Current: {editing[f.name]}</p>}
                     </>
                   )}
+                  {f.type === 'youtube' && (
+                    <input type="url" placeholder="https://www.youtube.com/watch?v=..." className="input-field" {...register(f.name, { required: f.required })} />
+                  )}
                   {['text', 'number', 'url'].includes(f.type) && (
                     <input type={f.type === 'url' ? 'url' : f.type} className="input-field" {...register(f.name, { required: f.required })} />
                   )}
+                  {f.hint && <p className="mt-1 text-xs text-ash/70">{f.hint}</p>}
                   {errors[f.name] && <p className="mt-1 text-xs text-blood">This field is required.</p>}
                 </div>
               ))}

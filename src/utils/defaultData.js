@@ -80,18 +80,8 @@ export const CATEGORIES = ['All', 'Wedding', 'Commercial', 'YouTube', 'Gaming', 
 
 // type: 'shorts' | 'long' — powers the Shorts / Long Videos toggle on Portfolio & Contact.
 export const defaultPortfolio = [
-  {
-    id: 'p1', title: 'Monsoon Wedding Film', category: 'Wedding', type: 'long',
-    youtubeId: 'aqz-KE-bpKQ', client: 'R & S Photography', software: 'DaVinci Resolve',
-    duration: '3:24', date: '2025', description: 'A full cinematic wedding highlight film, colour graded for warm golden tones.',
-    thumbnail: '', featured: true,
-  },
-  {
-    id: 'p2', title: 'Product Launch Reel', category: 'Commercial', type: 'shorts',
-    youtubeId: 'dQw4w9WgXcQ', client: 'Studio Nova', software: 'After Effects',
-    duration: '0:28', date: '2025', description: 'Punchy vertical ad cut for a product launch campaign.',
-    thumbnail: '', featured: true,
-  },
+  { id: 'p1', title: 'Monsoon Wedding Film', category: 'Wedding', type: 'long', youtubeId: 'aqz-KE-bpKQ' },
+  { id: 'p2', title: 'Product Launch Reel', category: 'Commercial', type: 'shorts', youtubeId: 'dQw4w9WgXcQ' },
 ]
 
 export const defaultTestimonials = [

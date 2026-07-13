@@ -24,7 +24,10 @@ router.post('/login', async (req, res) => {
     return res.status(401).json({ error: 'Invalid credentials.' })
   }
 
-  const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' })
+  // Long-lived on purpose — this is a single-owner tool, so once logged in
+  // the owner should stay logged in until they explicitly hit Logout,
+  // rather than being forced to re-enter credentials every few days.
+  const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '3650d' })
   res.json({ token, email: user.email })
 })
 
