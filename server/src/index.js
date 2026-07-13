@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.js'
 import contentRoutes from './routes/content.js'
 import itemsRoutes from './routes/items.js'
 import uploadRoutes from './routes/upload.js'
+import { runSeed } from './seed.js'
 
 const app = express()
 
@@ -37,4 +38,13 @@ app.use((err, req, res, next) => {
 })
 
 const PORT = process.env.PORT || 4000
-app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`))
+
+runSeed()
+  .catch((err) => {
+    // Don't crash the whole server if seeding fails (e.g. owner already
+    // exists, or env vars briefly missing during a redeploy) — just log it.
+    console.error('Seed on startup failed:', err.message)
+  })
+  .finally(() => {
+    app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`))
+  })

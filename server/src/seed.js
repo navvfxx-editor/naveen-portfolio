@@ -66,12 +66,12 @@ const defaultFaqs = [
   { question: 'How can I reach you?', answer: 'WhatsApp is fastest for quick questions — you can also email or DM on Instagram from the Contact page.' },
 ]
 
-async function main() {
+export async function runSeed() {
   const email = (process.env.OWNER_EMAIL || '').toLowerCase().trim()
   const password = process.env.OWNER_PASSWORD
 
   if (!email || !password) {
-    throw new Error('OWNER_EMAIL and OWNER_PASSWORD must be set in .env before seeding.')
+    throw new Error('OWNER_EMAIL and OWNER_PASSWORD must be set before seeding.')
   }
 
   const existing = await prisma.adminUser.findUnique({ where: { email } })
@@ -107,9 +107,15 @@ async function main() {
   console.log('Seed complete.')
 }
 
-main()
-  .catch((err) => {
-    console.error(err)
-    process.exit(1)
-  })
-  .finally(() => prisma.$disconnect())
+// Only run immediately (and disconnect Prisma afterwards) when this file is
+// executed directly via `npm run seed`. When imported by index.js for
+// auto-seeding on server startup, it must NOT disconnect the shared client.
+const isRunDirectly = process.argv[1] && process.argv[1].endsWith('seed.js')
+if (isRunDirectly) {
+  runSeed()
+    .catch((err) => {
+      console.error(err)
+      process.exit(1)
+    })
+    .finally(() => prisma.$disconnect())
+}
